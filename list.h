@@ -49,9 +49,9 @@ void list_add_to_front(list_t *l, elem value); //1
 void list_add_at_index(list_t *l, elem value, int index); //1
 
 /* Methods for removing from the list. Returns the removed element. */
-elem list_remove_from_back(list_t *l); 
+elem list_remove_from_back(list_t *l); //1
 elem list_remove_from_front(list_t *l); //1
-elem list_remove_at_index(list_t *l, int index);
+elem list_remove_at_index(list_t *l, int index); //1
 
 /* Checks to see if the given element exists in the list. */
 bool list_is_in(list_t *l, elem value); //1

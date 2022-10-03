@@ -28,22 +28,12 @@ void list_free(list_t *l) {
   curr = l-> head;
 
 while(curr != NULL){
-      tempNextNode = curr->next;
-      node_free(curr);
-      curr = tempNextNode;
-      if (curr == NULL)
-        printf("I'm Empty!\n");
-}
-//   if (curr != NULL){
-//     tempNextNode = curr->next;
-//     node_free(curr);
-//     curr = tempNextNode;  //problem right here "list_t has no member named 'next' "
-//   }
-//   else{
-//     printf("I'm Empty!\n");   
-//   }
-//  }
-
+  tempNextNode = curr->next;
+  node_free(curr);
+  curr = tempNextNode;
+  if (curr == NULL)
+    printf("I'm Empty!\n");
+  }
 }
 
 void node_free(node_t *node){
@@ -127,18 +117,27 @@ void list_add_at_index(list_t *l, elem value, int index) {
 }
 
 elem list_remove_from_back(list_t *l) { 
-  node_t *curr = l->head, *temp;
-  elem temp_val; 
+    
+    node_t *currNode = l->head, *tempNextNode;
+    elem temp_val; 
 
-  while(curr != NULL ){
-    if (curr->next->next == NULL){
-      temp_val = curr->next->value;
-      node_free(curr->next);
-      return temp_val;
+    while(currNode->next != NULL ){
+      tempNextNode = currNode->next;
+      temp_val = tempNextNode->value;
+      if (tempNextNode->next == NULL){
+        printf("\nFreeing Node From List...\n");
+        node_free(tempNextNode);
+        currNode->next = NULL;
+        // currNode = currNode->next;
+      }
+      else{
+        currNode = currNode->next;
+      }
+
     }
-    else
-      curr = curr->next;
-   }
+    printf("\nReturn Temporary Value: %d\n", temp_val);
+
+    return temp_val; 
   }
 
 elem list_remove_from_front(list_t *l) { 
@@ -146,33 +145,40 @@ elem list_remove_from_front(list_t *l) {
   temp = curr->next;
   l->head = temp;
   node_free(curr);
-  return temp->value; }
+  return temp->value; 
+  }
 
 elem list_remove_at_index(list_t *l, int index) { 
-    // node_t *curr = l->head;
-    // elem temp_val;
-    
-    // node_t *temp;
-    // int counter = 0; 
+    node_t *currNode, *tempNextNode, *prevNode;
+    elem temp_val;
+    int counter, length; 
 
-    // //initialize counter to compare with index value
-    // while(counter <= index){
-    //   if (index == 0 && counter == 0){
-    //     list_remove_from_front(l);
-    //   }
-    //   else if (counter + 1 == index){
-    //     temp = curr;
-    //     temp = curr->next;
-    //     curr->next = newNode;
-    //     newNode->next = temp;
-    //     return 
-    //   }  
-    //   else{
-    //     curr = curr->next;
-    //   }
-    //   counter++;
-    // }
-  return -1; }
+    currNode = l->head;
+    counter = 0;
+    length = list_length(l); 
+
+    if(index > length){
+        printf("index is too big!\n");
+        return -1; 
+      }
+    //initialize counter to compare with index value
+    while(counter <= index){
+      if (index == 0 && counter == 0){
+        temp_val = currNode->value;
+        list_remove_from_front(l);
+        return temp_val;
+      }
+      else if (counter == index){
+      temp_val = currNode->value;
+      prevNode->next = tempNextNode; 
+      node_free(currNode);
+      }
+      prevNode = currNode; 
+      currNode = prevNode->next;
+      tempNextNode = currNode->next;
+      counter++;
+    }
+  return temp_val; }
 
 bool list_is_in(list_t *l, elem value) {
   node_t *curr;
