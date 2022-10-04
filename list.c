@@ -118,27 +118,27 @@ void list_add_at_index(list_t *l, elem value, int index) {
 
 elem list_remove_from_back(list_t *l) { 
     
-    node_t *currNode = l->head, *tempNextNode;
-    elem temp_val; 
+  node_t *currNode = l->head, *tempNextNode;
+  elem temp_val; 
 
-    while(currNode->next != NULL ){
-      tempNextNode = currNode->next;
-      temp_val = tempNextNode->value;
-      if (tempNextNode->next == NULL){
-        printf("\nFreeing Node From List...\n");
-        node_free(tempNextNode);
-        currNode->next = NULL;
-        // currNode = currNode->next;
-      }
-      else{
-        currNode = currNode->next;
-      }
+  while(currNode->next != NULL ){
 
+    tempNextNode = currNode->next;
+    temp_val = tempNextNode->value;
+
+    if (tempNextNode->next == NULL){
+      node_free(tempNextNode);
+      currNode->next = NULL;
+      printf("%d has been removed from the list!\n", temp_val);
     }
-    printf("\nReturn Temporary Value: %d\n", temp_val);
+    else{
+      currNode = currNode->next;
+    }
 
-    return temp_val; 
   }
+  
+  return temp_val; 
+}
 
 elem list_remove_from_front(list_t *l) { 
   node_t *curr =  l->head, *temp;
@@ -149,50 +149,69 @@ elem list_remove_from_front(list_t *l) {
   }
 
 elem list_remove_at_index(list_t *l, int index) { 
-    node_t *currNode, *tempNextNode, *prevNode;
-    elem temp_val;
-    int counter, length; 
+  node_t *currNode, *tempNextNode, *prevNode;
+  elem temp_val;
+  int counter, length; 
 
-    currNode = l->head;
-    counter = 0;
-    length = list_length(l); 
+  currNode = l->head;
+  counter = 0;
+  length = list_length(l); 
 
-    if(index > length){
-        printf("index is too big!\n");
-        return -1; 
-      }
-    //initialize counter to compare with index value
-    while(counter <= index){
-      if (index == 0 && counter == 0){
-        temp_val = currNode->value;
-        list_remove_from_front(l);
-        return temp_val;
-      }
-      else if (counter == index){
-      temp_val = currNode->value;
-      prevNode->next = tempNextNode; 
-      node_free(currNode);
-      }
-      prevNode = currNode; 
-      currNode = prevNode->next;
-      tempNextNode = currNode->next;
-      counter++;
+  if(index > length){
+    printf("index is too big!\n");
+    return -1; 
     }
-  return temp_val; }
+  while(counter <= index){   //initialize counter to compare with index value
+
+    if (index == 0 && counter == 0){
+      temp_val = currNode->value;
+      list_remove_from_front(l);
+      printf("The elem at index %d : %d was removed!\n", index, temp_val);
+      return temp_val;
+    }
+    else if (counter == index){
+    temp_val = currNode->value;
+    prevNode->next = tempNextNode; 
+    node_free(currNode);
+    }
+    prevNode = currNode; 
+    currNode = prevNode->next;
+    tempNextNode = currNode->next;
+    counter++;
+  
+
+  }
+
+  printf("The elem at index %d : %d was removed!\n", index, temp_val);
+
+  return temp_val; 
+}
 
 bool list_is_in(list_t *l, elem value) {
   node_t *curr;
   int counter, length;
+  bool isInListFalse;
 
   curr = l->head;
   length = list_length(l); 
+  isInListFalse = false;   //initialize in list to false
+
   for (counter = 0; counter < length; counter++ ){
+
     if (curr->value == value)
-      return true;
+      isInListFalse = true; 
     else
       curr = curr->next;
-    }  
-  return false;
+
+  }
+
+  if (isInListFalse == true)
+    printf("%d was in the list!\n", value);
+  else
+    printf("%d was not in the list!\n", value); 
+
+  return isInListFalse;
+
   }
 
 elem list_get_elem_at(list_t *l, int index) { 
@@ -201,9 +220,13 @@ elem list_get_elem_at(list_t *l, int index) {
 
   curr = l->head;
   length = list_length(l) + 1;
+
   for (counter = 0; counter <= length; counter++ ){
-    if (counter == index)
+
+    if (counter == index){
+      printf("The elem at index %d is %d!\n", index, curr->value);
       return curr->value;
+    }
     else 
       curr = curr->next;
     }  
@@ -212,20 +235,26 @@ elem list_get_elem_at(list_t *l, int index) {
 
 
 int list_get_index_of(list_t *l, elem value) {
-  node_t *curr;
+  node_t *currNode;
   int counterIndex, length;
 
-  curr = l->head;
+  currNode = l->head;
   length = list_length(l) + 1;
 
-  if (curr == NULL)
+  if (currNode == NULL)
     return -1;
 
   for (counterIndex = 0; counterIndex <= length; counterIndex++ ){
-    if (curr->value == value)
+
+    if (currNode->value == value){
+      printf("\n%d has an index of %d! \n", value, counterIndex);
       return counterIndex;
+    }
     else 
-      curr = curr->next;
+      currNode = currNode->next;
     }  
+
   }
+
+
 
