@@ -32,6 +32,9 @@ typedef struct list list_t;
 list_t *list_alloc();
 void list_free(list_t *l);
 
+node_t *node_alloc();
+void node_free(node_t *node);
+
 /* Prints the list in some format. */
 void list_print(list_t *l);
 
